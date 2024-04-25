@@ -1,0 +1,325 @@
+SWC,SWC name,tool,finding,Unnamed: 4,discription,collector
+113,,smartcheck,SOLIDITY_ADDRESS_HARDCODED,,合同包含未知地址。如果一个硬编码的地址不再有效，调用该地址可能会导致合约执行失败。,罗碧文
+133,,smartcheck,SOLIDITY_ARRAY_LENGTH_MANIPULATION,,动态数组的长度直接更改。在这种情况下，可能会出现巨大的阵列，并可能导致存储重叠攻击（与存储中的其他数据发生冲突）。,罗碧文
+132,,smartcheck,SOLIDITY_BALANCE_EQUALITY,,避免检查严格的平衡等式：对手可以通过selfdestruct()或挖掘将以太币强制发送到任何地址。,罗碧文
+,,smartcheck,SOLIDITY_BYTE_ARRAY_INSTEAD_BYTES,,使用bytes而不是byte[]以降低gas消耗。,罗碧文
+,,smartcheck,SOLIDITY_CALL_WITHOUT_DATA,,使用不提供参数的低级call()函数。,罗碧文
+,,smartcheck,SOLIDITY_CONSTRUCTOR_RETURN,,return语句用于合约的构造函数。随着return，部署的过程将不同于直观的过程。例如，部署的字节码可能不包括在源代码中实现的函数。,罗碧文
+,,smartcheck,SOLIDITY_DELETE_ON_DYNAMIC_ARRAYS,,对动态大小的存储阵列应用delete或.length=0可能会导致Out of Gas异常。,罗碧文
+111,,smartcheck,SOLIDITY_DEPRECATED_CONSTRUCTIONS,,"使用废弃的函数：years, sha3, suicide, throw ,constant ",罗碧文
+,,smartcheck,SOLIDITY_DIV_MUL,,Solidity只对整数进行运算。因此，如果在乘法之前进行除法，舍入误差可能会急剧增加。,罗碧文
+,,smartcheck,SOLIDITY_DO_WHILE_CONTINUE,,在0.5.0版本之前，Solidity编译器错误地处理do-wile循环内部的continue：它忽略while条件。,罗碧文
+114,,smartcheck,SOLIDITY_ERC20_APPROVE,,ERC-20的审批功能很脆弱。使用前置攻击，可以在更改允许值之前花费批准的代币。,罗碧文
+,,smartcheck,SOLIDITY_ERC20_FUNCTIONS_ALWAYS_RETURN_FALSE,,transfer、transferFrom或approve函数对于输入参数的任何值都不返回true。,罗碧文
+,,smartcheck,SOLIDITY_ERC20_INDEXED,,ERC-20令牌标准的Transfer和Approve事件的地址参数必须编入索引。,罗碧文
+,,smartcheck,SOLIDITY_ERC20_TRANSFER_SHOULD_THROW,,ERC-20代币标准的功能在特殊情况下应抛出：如果_from帐户余额没有足够的代币可供消费，则应抛出transfer。transferFrom应该抛出，除非_from帐户通过某种机制故意授权消息的发送者,罗碧文
+116,,smartcheck,SOLIDITY_EXACT_TIME,,与block.timestamp或now进行严格比较。矿工可以影响block.timestamp以获得好处。因此，不应该依赖block.timestamp的确切值。,罗碧文
+,,smartcheck,SOLIDITY_EXTRA_GAS_IN_LOOPS,,"在for或while循环的条件下使用了非内存数组的状态变量、.balance, or .length。在这种情况下，循环的每次迭代都会消耗额外的gas。",罗碧文
+,,smartcheck,SOLIDITY_FUNCTION_RETURNS_TYPE_AND_NO_RETURN,,函数未初始化返回值。结果将返回默认值。,罗碧文
+,,smartcheck,SOLIDITY_GAS_LIMIT_IN_LOOPS,,循环中的gas限制。以太坊是一个资源非常有限的环境。每个计算步骤的价格比集中式提供商高出几个数量级。此外，以太坊矿工对区块内消耗的gas总量进行了限制。如果array.length足够大，则该函数将超过区块的gas限制，调用它的事务将永远不会得到确认.如果外部参与者影响数组长度，这将成为一个安全问题。,罗碧文
+,,smartcheck,SOLIDITY_INCORRECT_BLOCKHASH,,blockhash函数只为最后256个块返回一个非零值。此外，它总是为当前块返回0，即blockhash（block.number）总是等于0。,罗碧文
+113,,smartcheck,SOLIDITY_LOCKED_MONEY,,被编程为接收以太币的合约应该实现一种撤回以太币的方式，即至少调用一次transfer（推荐）、send或call.value。,罗碧文
+,,smartcheck,SOLIDITY_MSGVALUE_EQUALS_ZERO,,msg.value==0条件检查在大多数情况下是没有意义的。,罗碧文
+,,smartcheck,SOLIDITY_OVERPOWERED_ROLE,,此函数只能从一个地址调用。因此，系统在很大程度上依赖于这个地址。在这种情况下，有些情况可能会给投资者带来不良后果，例如，如果该地址的私钥被泄露。,罗碧文
+103,,smartcheck,SOLIDITY_PRAGMAS_VERSION,,solidity源文件指示可以使用的编译器版本。pragma solidity ^0.4.17；//坏：编译w 0.4.17及以上pragma solidity 0.4.24；//好：仅编译w 0.4.24,罗碧文
+108,,smartcheck,SOLIDITY_PRIVATE_MODIFIER_DOES_NOT_HIDE_DATA,,私有修饰符不会使变量不可见。矿工可以访问所有合同的代码和数据。,罗碧文
+,,smartcheck,SOLIDITY_REDUNDANT_FALLBACK_REJECT,,付款拒绝回退是多余的。合同应拒绝意外付款。从Solidity 0.4.0开始，没有回退功能的合同会自动恢复付款。,罗碧文
+,,smartcheck,SOLIDITY_REVERT_REQUIRE,,使用构造if（condition）｛revert（）；｝而不是require（condition）；,罗碧文
+,,smartcheck,SOLIDITY_REWRITE_ON_ASSEMBLY_CALL,,CALL系列的内联汇编指令的危险使用，它用输出覆盖输入。在调用任意地址的情况下，返回值可能与预期值不同。,罗碧文
+,,smartcheck,SOLIDITY_SAFEMATH,,使用了SafeMath库。,罗碧文
+113,,smartcheck,SOLIDITY_SEND,,send函数是在检查内部调用的，而不是使用transfer。建议使用addr.transfer（x）进行检查以太支付。,罗碧文
+,,smartcheck,SOLIDITY_SHOULD_NOT_BE_PURE,,在Solidity中，不从状态读取或修改状态的函数可以声明为pure。,罗碧文
+,,smartcheck,SOLIDITY_SHOULD_NOT_BE_VIEW,,在Solidity中，不从状态读取或修改状态的函数可以声明为view。,罗碧文
+,,smartcheck,SOLIDITY_SHOULD_RETURN_STRUCT,,对于内部函数或私有函数，请考虑使用结构而不是多个返回值。它可以提高代码的可读性。,罗碧文
+128,,smartcheck,SOLIDITY_TRANSFER_IN_LOOP,,ETH在循环中传输。如果至少有一个地址无法接收ETH（例如，它是一个具有默认回退功能的合同），则整个交易将被恢复。,罗碧文
+115,,smartcheck,SOLIDITY_TX_ORIGIN,,tx.origin用于授权。,罗碧文
+,,smartcheck,SOLIDITY_UINT_CANT_BE_NEGATIVE,,uint类型的变量不能为负数。因此，将uint变量与零（大于或等于）进行比较是多余的。此外，它还可能导致下溢问题。此外，与for循环条件中使用的零进行比较会导致无限循环。,罗碧文
+104,,smartcheck,SOLIDITY_UNCHECKED_CALL,,预计对外部合约的调用将失败。发送以太坊时，请检查返回值并处理错误。执行以太坊传输的推荐方法是transfer。,罗碧文
+,,smartcheck,SOLIDITY_UNUSED_FUNCTION_SHOULD_BE_EXTERNAL,,具有公共可见性修饰符的函数，该函数不在内部调用。将可见性级别更改为外部可提高代码的可读性。此外，在许多情况下，与具有公共可见性修饰符的函数相比，具有外部可见性修饰符的功能消耗更少的gas。,罗碧文
+,,smartcheck,SOLIDITY_UPGRADE_TO_050,,准备Solidity 0.5.0版本的代码。,罗碧文
+,,smartcheck,SOLIDITY_USING_INLINE_ASSEMBLY,,Inline assembly是在较低级别访问以太坊虚拟机的一种方式。这放弃了Solidity的几个重要安全特性。,罗碧文
+101,,smartcheck,SOLIDITY_VAR,,Solidity支持类型推理：var i=42中i的类型；是足以存储右侧值（uint8）的最小整数类型。考虑一个常见的for循环模式：对于（var i=0；i<数组长度；i++）｛/*…*/｝i的类型被推断为uint8。如果array.length大于255，则会发生溢出。,罗碧文
+101,,smartcheck,SOLIDITY_VAR_IN_LOOP_FOR,,Solidity支持类型推理：var i=42中i的类型；是足以存储右侧值（uint8）的最小整数类型。考虑一个常见的for循环模式：对于（var i=0；i<数组长度；i++）｛/*…*/｝i的类型被推断为uint8。如果array.length大于255，则会发生溢出。,罗碧文
+100,,smartcheck,SOLIDITY_VISIBILITY,,合同中的默认功能可见性级别是公共的，在接口中是外部的，状态变量的默认可见性级别是内部的。在合同中，后备功能可以是外部的，也可以是公共的。在接口中，所有函数都应声明为外部函数。明确定义函数可见性以防止混淆。,罗碧文
+,,smartcheck,SOLIDITY_WRONG_SIGNATURE,,在Solidity中，函数签名被定义为没有数据位置说明符的基本原型的规范表达式，即带括号的参数类型列表的函数名称。参数类型由一个逗号分隔，不使用空格。这意味着应该使用uint256和int256，而不是uint或int。,罗碧文
+132,,smartcheck,VYPER_BALANCE_EQUALITY,,避免检查严格的平衡等式：对手可以通过selfdestruct()或挖掘将以太币强制发送到任何地址。,罗碧文
+114,,smartcheck,VYPER_ERC20_APPROVE,,ERC-20 approve()函数易受前置交易攻击。,罗碧文
+113,,smartcheck,VYPER_LOCKED_MONEY,,包含至少一个带有@paypaydecorator的函数的合约应实现一种提取ETH的方法，即至少调用send（推荐）、raw_call或self-destruct函数一次。,罗碧文
+108,,smartcheck,VYPER_PRIVATE_MODIFIER_DONT_HIDE_DATA,,在没有公共函数的情况下初始化变量默认为私有声明，因此只能由同一约定中的方法访问。与一种流行的误解相反，这些变量的值仍然可以供用户访问。,罗碧文
+,,smartcheck,VYPER_REDUNDANT_FALLBACK_REJECT,,拒绝付款默认功能是多余的。,罗碧文
+116,,smartcheck,VYPER_TIMESTAMP_DEPENDENCE,,合约中使用了block.timestamp变量。矿工可以稍微调整区块时间戳。,罗碧文
+,,smartcheck,VYPER_UNITLESS_NUMBER,,Vyper允许您将单位标签用于uint256、int128或十进制类型。实现此功能是为了提高代码的可读性和安全性。但是，合同中使用了as_unitless_number()函数。使用此功能可能会危及合同安全。,罗碧文
+,,conkas,,,conkas在0.6、0.7、0.8中不能运行，python报错尝试对一个none类型的对象使用len()函数和尝试访问none对象的expressionlist,罗碧文
+116,,conkas,Time_Manipulation,,时间操控：在智能合约中，时间是通过时间戳来获取，矿工修改时间戳，容易造成漏洞,罗碧文
+107,,conkas,Reentrancy,,可重入：当合约在发送资金之前未能更新其状态时，攻击者可以连续调用提现函数来耗尽合约的资金。,罗碧文
+101,,conkas,Integer_Underflow,,整数下溢：数值太小溢出,罗碧文
+114,,conkas,Transaction_Ordering_Dependence,,抢先交易：恶意用户可以窃取该解决方案并以更高的费用复制其交易，以抢占原始解决方案。,罗碧文
+104,,conkas,Unchecked_Low_Level_Call,,低级调用未检查返回值：低级函数出错时如果不检查他的返回值可能会导致程序的错误,罗碧文
+101,,conkas,Integer_Overflow,,整数上溢：数值太大溢出,罗碧文
+,,,,,,
+,,Oyente,Callstack Depth Attack Vulnerability,,如果一个合约递归地调用自己，直到调用栈深度达到1024，那么任何进一步的调用（如发送交易）都会失败，因为已经没有足够的空间来处理新的调用帧。如果合约在进行交易时没有正确处理返回值，那么当调用栈深度达到极限时，可能会导致交易失败。合约中可能导致调用栈深度攻击的代码模式，如合约递归调用自身太多次，Oyente会标记这种潜在的漏洞。,胡欣宇
+101,Integer Overflow and Underflow,Oyente,Integer Overflow,溢出,当算术运算达到类型的最大时，会发生上溢。在计算机编程中，当算术运算试图创建一个超出给定位数所能表示的范围的数值时，就会发生溢出——大于最大值或低于最小值。,胡欣宇
+,,Oyente,Integer Underflow,,当算术运算达到类型的最小时，会发生下溢。在计算机编程中，当算术运算试图创建一个超出给定位数所能表示的范围的数值时，就会发生溢出——大于最大值或低于最小值。,胡欣宇
+,,Oyente,Parity Multisig Bug 2,,Parity Multisig Bug 2是一个在Parity多重签名钱包合约中的漏洞，允许攻击者在没有正确权限的情况下重置合约的所有权，从而窃取钱包中存储的资金。如果工具被用于分析Parity多重签名钱包合约，它可能会发现合约中的逻辑漏洞，特别是那些与权限管理和异常处理相关的漏洞。,胡欣宇
+107,Reentrancy,Oyente,Re-Entrancy Vulnerability,,（swc）在可重入性攻击（也称为递归调用攻击）中，恶意合约在函数的第一次调用完成之前回调到调用合约中，这可能会导致函数的不同调用以不希望的方式进行交互。如果合约在调用另一个合约后，没有正确地保护其自身状态，使得被调用的合约可以重复调用并导致无限循环，Oyente会将其标记为可重入性漏洞。这种漏洞可能导致合约的资金被耗尽。,胡欣宇
+116,Block values as a proxy for time,Oyente,Timestamp Dependency,,合同通常需要访问时间值来执行某些类型的功能。block.timestamp和block.number等值可以让您了解当前时间或时间增量，但在大多数情况下使用它们并不安全。如果合约使用区块时间戳作为触发条件来执行关键操作（例如发送资金），Oyente会将其标记为时间戳依赖性合约。矿工可以调整区块时间戳，从而可能操纵依赖时间戳的合约的执行结果。,胡欣宇
+114,Transaction Order Dependence,Oyente,Transaction-Ordering Dependence (TOD),,如果合约的最终状态取决于交易的执行顺序，Oyente会将其标记为TOD合约。这种依赖性可能导致合约在不同的交易顺序下产生不同的结果，从而被恶意用户利用。,胡欣宇
+106,Unprotected SELFDESTRUCT Instruction,Maian,Destructible,由于访问控制缺失或不足，恶意方可能会自毁合同。,这类合约包含了SUICIDE指令，可以被任意地址调用以销毁合约，并将合约中的资金转移到指定地址。,胡欣宇
+,,,Destructible (verified),,与“Destructible”类似，但经过MAIAN工具的具体验证，确认合约确实可以被任意地址销毁。,胡欣宇
+105,Unprotected Ether Withdrawal,Maian,Ether leak,由于访问控制缺失或不足，恶意方可以从合同账户中提取部分或全部以太币。,指的是合约可能存在漏洞，允许以太币被发送到任意地址，而没有相应的安全检查或条件限制。,胡欣宇
+,,,Ether leak (verified),,MAIAN工具通过具体验证确认合约存在以太币泄漏的问题，即以太币可以被发送到任意地址。,胡欣宇
+,,Maian,Ether lock,,这类合约接收以太币但没有提供将资金释放或发送出去的机制，导致资金被无限期锁定。,胡欣宇
+,,,Ether lock (Ether accepted without send),,以太币锁定，接受以太币但没有发送指令。合约接受以太币，但在其字节码中没有包含CALL、DELEGATECALL或SUICIDE等可以释放以太币的指令。,胡欣宇
+,,Maian,No Ether leak (no send),,无以太币泄漏，没有发送指令。合约没有漏洞可以导致以太币泄漏，因为合约中没有发送资金到外部的指令。,胡欣宇
+,,Maian,No Ether lock (Ether refused),,无以太币锁定，拒绝以太币。合约设计为拒绝接受以太币，因此不存在资金被锁定的风险。,胡欣宇
+,,Maian,Not destructible (no self-destruct),,不可被销毁，没有自毁指令。合约不包含SUICIDE指令，因此不能被任意地址销毁。,胡欣宇
+,,Slither,abiencoderv2-array,,检查与ABI编码器v2相关的数组问题。solc版本0.4.7-0.5.9包含导致ABI编码器使用不正确的编译器错误。建议使用编译器>=0.5.10。,胡欣宇
+105,Unprotected Ether Withdrawal,Slither,arbitrary-send,发送代币问题,检测合约中允许任意发送以太币的函数。由于访问控制缺失或不足，恶意方可以从合同账户中提取部分或全部以太币。此错误有时是由无意中暴露初始化函数引起的。通过错误地命名打算作为构造函数的函数，构造函数代码最终会出现在运行时字节码中，任何人都可以调用它来重新初始化约定。,胡欣宇
+,,Slither,arbitrary-send-erc20,,在transferFrom中未将msg.sender用作from时进行检测。建议在transferFrom中使用msg.sender作为from。,胡欣宇
+,,Slither,arbitrary-send-erc20-permit,,当在transferFrom中未将msg.sender用作from并使用permit时进行检测。建议确保底层ERC20令牌正确实现许可功能。,胡欣宇
+,,Slither,arbitrary-send-eth,,对将以太币发送到任意地址的函数的无保护调用。建议确保任意用户不能提取未经授权的资金。,胡欣宇
+,,Slither,array-by-reference,,检测传递给期望引用存储阵列的函数的阵列，建议确保正确使用内存和存储在功能参数中。明确所有位置。,胡欣宇
+,,Slither,assembly,,检测合约中使用的汇编代码。,胡欣宇
+,,Slither,assert-state-change,,assert（）的使用不正确。建议对修改状态的不变量使用require。,胡欣宇
+,,Slither,backdoor,,合约中可能存在后门。,胡欣宇
+,,Slither,boolean-cst,,检测布尔常量的误用。建议验证并简化条件。,胡欣宇
+,,Slither,boolean-equal,,检测与布尔常量的比较。建议删除布尔常量的相等项。,胡欣宇
+113,DoS with Failed Call,Slither,calls-loop,,【（swc）外部调用可能意外或故意失败，这可能会导致合约中出现DoS情况。为了最大限度地减少此类故障造成的损害，最好将每个外部呼叫隔离到其自己的事务中，该事务可以由呼叫的接收方发起。这与支付尤其相关，在支付中，最好让用户提取资金，而不是自动向他们推送资金（这也减少了汽油限额出现问题的可能性）。】循环内的调用可能会导致拒绝服务攻击。建议对于外部呼叫，支持“拉-推”策略。,胡欣宇
+,,Slither,complex-function,,检查函数复杂度，可能影响可读性和安全性。,胡欣宇
+,,Slither,constable-states,,部署后未更新的状态变量应声明为常量，以节省资源。建议将常量属性添加到从不更改的状态变量中。,胡欣宇
+,,Slither,constant-function,常函数问题,检测被标记为constant的函数。,胡欣宇
+,,Slither,constant-function-asm,,在Solidity 0.5之前，未强制使用程序集code.constant/pure/view声明为常量/pure/vew的函数。从Solidity 0.5开始，对常量/pure/view函数的调用使用STATICALL操作码，该操作码在状态修改的情况下会恢复。因此，对标记错误的函数的调用可能会捕获使用Solidity 0.5编译的合约。建议确保Solidity 0.5.0之前编译的合同的属性是正确的。,胡欣宇
+,,Slither,constant-function-state,,声明为常量/pure/view的函数会更改状态。在Solidity 0.5之前未强制执行常量/纯视图。从Solidity 0.5开始，对常量/pure/view函数的调用使用STATICALL操作码，该操作码在状态修改的情况下会恢复。因此，对标记错误的函数的调用可能会捕获使用Solidity 0.5编译的合约。建议确保在Solidity 0.5.0之前编译的合同的属性是正确的。,胡欣宇
+,,Slither,controlled-array-length,,"检测数组长度的直接赋值。建议
+不允许直接设置数组长度；相反，根据需要选择添加值。否则，请彻底审查合同，以确保用户控制的变量不能达到数组长度分配。",胡欣宇
+106,Unprotected SELFDESTRUCT Instruction,Slither,controlled-delegatecall,,【（swc）由于访问控制缺失或不足，恶意方可能会自毁合同。】向用户控制的地址委派调用或调用代码。建议避免使用delegatecall。仅使用受信任的目的地。,胡欣宇
+,,Slither,costly-loop,,循环中代价高昂的操作可能会浪费时间，因此优化是合理的。建议使用局部变量来保存循环计算结果。,胡欣宇
+,,Slither,dead-code,,未被请求的函数。建议删除未使用的功能。,胡欣宇
+,,Slither,delegatecall-loop,,在payable函数的循环中检测delegatecall的使用情况。建议仔细检查delegatecall调用的函数是否是不可支付的/是否使用msg.value。,胡欣宇
+,,Slither,deprecated-standards,,检测不推荐使用的标准的使用情况。建议替换所有不推荐使用的符号。,胡欣宇
+,,Slither,divide-before-multiply,,Solidity的整数除法截断。因此，先除法后乘法可能会导致精度损失。建议考虑先乘法后除法。,胡欣宇
+,,Slither,domain-separator-collision,,检测EIP-712域分隔符的潜在冲突。,胡欣宇
+,,Slither,enum-conversion,,检测超出范围的枚举转换（solc<0.4.5）。建议使用最新的编译器版本。如果要求solc<0.4.5，请检查枚举转换范围。,胡欣宇
+,,Slither,erc20-indexed,,检测ERC20规范定义的事件是否缺少索引关键字，这些事件应具有索引的某些参数。建议根据ERC20规范，将索引关键字添加到应该包括它的事件参数中。,胡欣宇
+,,Slither,erc20-interface,,ERC20函数的返回值不正确。Solidity>0.4.22编译的合约与这些函数交互时将无法执行它们，因为缺少返回值。建议为定义的ERC20函数设置适当的返回值和类型。,胡欣宇
+,,Slither,erc721-interface,,ERC721函数的返回值不正确。solidity>0.4.22编译的合约与这些函数交互将无法执行它们，因为缺少返回值。建议为定义的ERC721函数设置适当的返回值和vtypes。,胡欣宇
+,,Slither,events-access,,检测关键访问控制参数的丢失事件建议为关键参数更改发出事件。,胡欣宇
+,,Slither,events-maths,,检测关键算术参数的丢失事件。建议为关键参数更改发出事件。,胡欣宇
+,,Slither,external-function,,从来没有被契约调用过的公共函数应该声明为外部函数，并且它的不可变参数应该位于calldata中以节省开销。建议对从未从约定中调用过的函数使用外部属性，并将不可变参数的位置更改为calldata以节省开支。,胡欣宇
+,,Slither,function-init-state,,通过非纯/常量或使用非常量状态变量的函数调用检测状态变量的立即初始化。建议通过非常量状态变量或函数调用删除状态变量的任何初始化。如果必须在协定部署时设置变量，请改为在构造函数中定位初始化。,胡欣宇
+,,Slither,incorrect-equality,,使用可以被攻击者轻易操纵的严格等式。建议不要使用严格的等式来确定帐户是否有足够的以太币或代币。,胡欣宇
+,,Slither,incorrect-modifier,,如果修饰符不执行_或revert，则函数的执行将返回默认值，这可能会误导调用者。建议修改器中的所有路径都必须执行_或还原。,胡欣宇
+,,Slither,incorrect-shift,,检测换档操作中的值是否颠倒，建议交换参数的顺序。,胡欣宇
+,,Slither,incorrect-unary,,像x=+1这样的一元表达式可能打字错误。建议删除一元表达式。,胡欣宇
+,,Slither,locked-ether,,具有应付功能但没有提款能力的合约。建议删除payable属性或添加提款功能。,胡欣宇
+104,Unchecked Call Return Value,Slither,low-level-calls,,【未检查消息调用的返回值。即使被调用的合约抛出异常，执行也将恢复。如果调用意外失败，或者攻击者强制调用失败，这可能会导致后续程序逻辑出现意外行为。】使用低级调用容易出错。低级别调用不检查代码是否存在或调用是否成功。建议避免低级调用。检查呼叫是否成功。如果该调用是针对合约的，请检查是否存在代码。,胡欣宇
+,,Slither,mapping-deletion,,在包含映射的结构中进行删除不会删除映射。剩余的数据可能会被用来破坏合同。建议使用锁定机制而不是删除来禁用包含映射的结构。,胡欣宇
+,,Slither,missing-inheritance,,检测丢失的继承。建议从缺少的接口或约定继承。,胡欣宇
+,,Slither,missing-zero-check,,检测到缺少零地址验证。建议检查地址是否为零。,胡欣宇
+,,Slither,msg-value-loop,,检测循环中msg.value的使用情况。建议在接收器数组旁边提供一个显式的金额数组，并检查所有金额的总和是否与msg.value匹配。,胡欣宇
+,,Slither,multiple-constructors,,检测同一合约中的多个构造函数定义（用新方案和旧方案）。建议只声明一个构造函数，最好使用新的方案构造函数。,胡欣宇
+,,Slither,name-reused,,如果一个代码库有两个名称相似的合约，那么编译工件将不包含其中一个名称重复的合约。建议重命名合同。,胡欣宇
+,,Slither,naming-convention,,Solidity定义了应遵循的命名约定。规则例外：允许常量变量名称/符号/小数小写（ERC20）。对于私有变量和未使用的参数，在mixed_case匹配的开头允许_。建议遵循Solidity命名约定。,胡欣宇
+103,Floating Pragma,Slither,pragma,,【合同应使用经过彻底测试的相同编译器版本和标志进行部署。锁定pragma有助于确保合同不会意外地使用过时的编译器版本进行部署，例如，该版本可能会引入对合同系统产生负面影响的错误。】检测是否使用不同的Solidity版本。建议使用一个Solidity版本。,胡欣宇
+,,Slither,protected-vars,,检测标记为受保护的未受保护的变量，建议向易受攻击的功能添加访问控制,胡欣宇
+,,Slither,public-mappings-nested,,在Solidity 0.5之前，具有嵌套结构的公共映射返回了不正确的值。建议不要将公共映射与嵌套结构一起使用。,胡欣宇
+,,Slither,redundant-statements,,检测无效的冗余语句的使用情况。建议如果多余的语句阻塞了代码但没有任何价值，请删除它们。,胡欣宇
+107,Reentrancy,Slither,reentrancy-benign,调用外部合同的主要危险之一是它们可以接管控制流。在可重入性攻击（也称为递归调用攻击）中，恶意合约在函数的第一次调用完成之前回调到调用合约中。这可能会导致函数的不同调用以不希望的方式进行交互。,可重入性错误的检测。只报告充当双重调用的可重入性。建议应用检查效果交互模式。,胡欣宇
+107,Reentrancy,Slither,reentrancy-eth,,可重入性错误的检测。不报告不涉及以太币的重入。建议应用检查效果交互模式。,胡欣宇
+,,Slither,reentrancy-events,,检测允许操作事件顺序或值的可重入性。建议应用检查效果交互模式。,胡欣宇
+107,Reentrancy,Slither,reentrancy-no-eth,,可重入性错误的检测。不报告涉及以太币的重入。,胡欣宇
+,,Slither,reentrancy-unlimited-gas,,可重入性错误的检测。仅报告基于传输或发送的可重入性。建议应用检查效果交互模式。,胡欣宇
+,,Slither,reused-constructor,,检测是否使用来自同一继承层次结构中两个不同位置的参数调用了相同的基构造函数。建议删除重复的构造函数调用。,胡欣宇
+,,Slither,rtlo,,攻击者可以通过使用从右到左的覆盖字符（U+202E）来操纵契约的逻辑。建议不得使用特殊控制字符。,胡欣宇
+119,Shadowing State Variables,Slither,shadowing-abstract,当使用继承时，Solidity允许对状态变量进行不明确的命名。具有变量x的契约A可以继承也定义了状态变量x的合约B。这将导致x的两个独立版本，其中一个从合同A访问，另一个从协议B访问。在更复杂的合同系统中，这种情况可能会被忽视，并随后导致安全问题。当在契约和函数级别上有多个定义时，隐藏状态变量也可能发生在单个契约中。,检测从抽象合约中隐藏的状态变量。建议删除状态变量阴影。,胡欣宇
+,,Slither,shadowing-builtin,,使用局部变量、状态变量、函数、修饰符或事件检测隐藏的内置符号。建议重命名隐藏内置符号的局部变量、状态变量、函数、修饰符和事件。,胡欣宇
+119,Shadowing State Variables,Slither,shadowing-local,,检测使用局部变量的阴影。建议重命名遮蔽另一个零部件的局部变量。,胡欣宇
+119,Shadowing State Variables,Slither,shadowing-state,,状态变量的检测被遮蔽。建议删除状态变量阴影。,胡欣宇
+,,Slither,similar-names,,检测名称过于相似的变量。建议防止变量具有相似的名称。,胡欣宇
+102,Outdated Compiler Version,Slither,solc-version,,【使用过时的编译器版本可能会有问题，尤其是当存在影响当前编译器版本的公开漏洞和问题时。】solc经常发布新的编译器版本。使用旧版本会阻止访问新的Solidity安全检查。我们还建议避免使用复杂的pragma语句。建议使用最新版本的Solidity（至少0.8.0）进行部署，没有已知的严重问题。使用一个允许任何这些版本的简单杂注版本。考虑使用最新版本的Solidity进行测试。,胡欣宇
+,,Slither,storage-array,,solc版本0.4.7-0.5.9包含一个编译器错误，导致有符号整数数组中的值不正确。建议使用编译器版本>=0.5.10。,胡欣宇
+106,Unprotected SELFDESTRUCT Instruction,Slither,suicidal,,【（swc）由于访问控制缺失或不足，恶意方可能会自毁合同。】对执行自毁/自杀的函数的无保护调用。建议保护对所有敏感功能的访问。,胡欣宇
+,,Slither,tautology,,检测同义重复或矛盾的表达式。建议通过更改值类型或比较来修复不正确的比较。,胡欣宇
+116,Block values as a proxy for time,Slither,timestamp,,【合同通常需要访问时间值来执行某些类型的功能。block.timestamp和block.number等值可以让您了解当前时间或时间增量，但在大多数情况下使用它们并不安全。】区块的危险使用。block.timestamp可以由矿工操作。建议不要使用evm程序集。,胡欣宇
+,,Slither,token-reentrancy,,检测代币转移中的重入风险。,胡欣宇
+,,Slither,too-many-digits,,"有很多数字的文字很难阅读和复习。使用科学的符号或后缀使代码更具可读性。建议使用Ether suffix, Time suffix, or The scientific notation",胡欣宇
+115,Authorization through tx.origin,Slither,tx-origin,,【tx.origin是Solidity中的一个全局变量，它返回发送交易的帐户的地址。如果授权帐户调用恶意合约，使用变量进行授权可能会使合约易受攻击。可以对通过授权检查的易受攻击的合约进行调用，因为tx.origin返回交易的原始发件人，在这种情况下是授权帐户。】如果合法用户与恶意合约进行交互，则基于tx.origin的保护可能会被恶意合约滥用。建议请勿使用tx.origin进行授权。,胡欣宇
+,,Slither,unchecked-lowlevel,,不检查低级调用的返回值。建议确保检查或记录了低级别调用的返回值。,胡欣宇
+,,Slither,unchecked-send,,不检查发送的返回值。建议确保已检查或记录send的返回值。,胡欣宇
+,,Slither,unchecked-transfer,,未检查外部transfer/transferFrom调用的返回值。建议使用SafeERC20，或确保已检查transfer/transferFrom返回值。,胡欣宇
+,,Slither,unimplemented-functions,,检测未在派生的大多数合约上实现的函数。建议在打算直接使用的任何约定中实现所有未实现的函数（而不仅仅是从继承）。,胡欣宇
+,,Slither,uninitialized-fptr-cst,未初始化的本地存储变量可能指向合同中的意外存储位置，从而导致有意或无意的漏洞。,solc版本0.4.5-0.4.26和0.5.0-0.5.8包含一个编译器错误，导致在构造函数中调用未初始化的函数指针时出现意外行为。建议在调用之前初始化函数指针。尽可能避免使用函数指针。,胡欣宇
+,,Slither,uninitialized-local,,未初始化的局部变量。建议初始化所有变量。如果要将变量初始化为零，请显式地将其设置为零以提高代码的可读性。,胡欣宇
+109,Uninitialized Storage Pointer,Slither,uninitialized-state,,未初始化的状态变量。建议初始化所有变量。如果要将变量初始化为零，请显式地将其设置为零以提高代码的可读性。,胡欣宇
+109,Uninitialized Storage Pointer,Slither,uninitialized-storage,,未初始化的存储变量将作为第一个状态变量的引用，并可以覆盖关键变量。建议初始化所有存储变量。,胡欣宇
+,,Slither,unprotected-upgrade,,检测可以被破坏的逻辑合约。建议添加构造函数以确保不能对逻辑约定调用initialize。,胡欣宇
+104,Unchecked Call Return Value,Slither,unused-return,,【未检查消息调用的返回值。即使被调用的合约抛出异常，执行也将恢复。如果调用意外失败，或者攻击者强制调用失败，这可能会导致后续程序逻辑出现意外行为。】外部调用的返回值不存储在本地变量或状态变量中。建议确保使用了函数调用的所有返回值。,胡欣宇
+131,Presence of unused variables,Slither,unused-state,,【Solidity中允许使用未使用的变量，它们不会造成直接的安全问题。不过，最好的做法是尽可能避免它们】未使用的状态变量。建议删除未使用的状态变量。,胡欣宇
+,,Slither,variable-scope,,在声明被跳过之前检测变量的可能用法（可能是因为它后来被声明，也可能是在另一个作用域中声明）。建议在使用变量之前移动所有变量声明，并确保在无条件使用变量声明的情况下，到达变量声明不依赖于某些条件。,胡欣宇
+,,Slither,void-cst,,检测对未实现的构造函数的调用。建议删除构造函数调用。,胡欣宇
+,,Slither,weak-prng,,Weak PRNG是由于block.timestamp、now或blockhash上的模。这些可能在一定程度上受到矿工的影响，因此应该避免。建议不要使用block.timestamp、now或blockhash作为随机性的来源,胡欣宇
+,,Slither,write-after-write,,检测已写入但从未读写过的变量。建议修复或删除写入。,胡欣宇
+,,,,,,
+SWC-112,Delegatecall to Untrusted Callee,mythril-0.24.7,Delegatecall to user-supplied address,,The contract delegates execution to another contract with a user-supplied address.,杨玉婷
+SWC-116、SWC-120,Block values as a proxy for time、Weak Sources of Randomness from Chain Attributes,mythril-0.24.7,Dependence on predictable environment variable,,"A control flow decision is made based on the block variable coinbase, gaslimit, timestamp or block number.",杨玉婷
+SWC-115,Authorization through tx.origin,mythril-0.24.7,Dependence on tx.origin,,Use of tx.origin as a part of authorization control.,杨玉婷
+SWC-110,Assert Violation,mythril-0.24.7,Exception State,,An assertion violation was triggered.,杨玉婷
+SWC-107,Reentrancy,mythril-0.24.7,External Call To User-Supplied Address,,A call to a user-supplied address is executed.,杨玉婷
+SWC-107,Reentrancy,mythril-0.24.7,State access after external call,,Read of/Write to persistent state following external call,杨玉婷
+SWC-101,Integer Overflow and Underflow,mythril-0.24.7,Integer Arithmetic Bugs,,The arithmetic operator can underflow/overflow,杨玉婷
+SWC-127,Arbitrary Jump with Function Type Variable,mythril-0.24.7,Jump to an arbitrary instruction,,The caller can redirect execution to arbitrary bytecode locations.,杨玉婷
+SWC-113,DoS with Failed Call,mythril-0.24.7,Multiple Calls in a Single Transaction,,Multiple calls are executed in the same transaction.,杨玉婷
+SWC-104,Unchecked Call Return Value,mythril-0.24.7,Unchecked return value from external call,,The return value of a message call is not checked.,杨玉婷
+SWC-105,Unprotected Ether Withdrawal,mythril-0.24.7,Unprotected Ether Withdrawal,,Any sender can withdraw Ether from the contract account,杨玉婷
+SWC-106,Unprotected SELFDESTRUCT Instruction,mythril-0.24.7,Unprotected Selfdestruct,,Any sender can cause the contract to self-destruct.,杨玉婷
+SWC-124,Write to Arbitrary Storage Location,mythril-0.24.7,Write to an arbitrary storage location,,The caller can write to arbitrary storage locations.,杨玉婷
+SWC-114,Transaction Order Dependence,mythril-0.24.7,Transaction Order Dependence,,The value of the call is dependent on balance or storage write.,杨玉婷
+SWC-123,Requirement Violation,mythril-0.24.7,requirement violation,,A requirement was violated in a nested call and the call was reverted as a result.,杨玉婷
+SWC-132,Unexpected Ether balance,mythril-0.24.7,Strict Ether balance check,,Use of strict ether balance checking.,杨玉婷
+SWC-124,Write to Arbitrary Storage Location,confuzzius,Arbitrary Memory Access,,,杨玉婷
+SWC-110,Assert Violation,confuzzius,Assertion Failure,,,杨玉婷
+SWC-120,Weak Sources of Randomness from Chain Attributes,confuzzius,Block Dependency,,,杨玉婷
+SWC-101,Integer Overflow and Underflow,confuzzius,Integer Overflow,,,杨玉婷
+SWC-105,Unprotected Ether Withdrawal,confuzzius,Leaking Ether,,,杨玉婷
+,,confuzzius,Locking Ether,,,杨玉婷
+SWC-107,Reentrancy,confuzzius,Reentrancy,,,杨玉婷
+SWC-114,Transaction Order Dependence,confuzzius,Transaction Order Dependency,,,杨玉婷
+SWC-104,Unchecked Call Return Value,confuzzius,Unhandled Exception,,,杨玉婷
+SWC-106,Unprotected SELFDESTRUCT Instruction,confuzzius,Unprotected Selfdestruct,,,杨玉婷
+SWC-112,Delegatecall to Untrusted Callee,confuzzius,Unsafe Delegatecall,,,杨玉婷
+,,osiris,Callstack bug,,,杨玉婷
+SWC-114,Transaction Order Dependence,osiris,Concurrency bug,,,杨玉婷
+,,osiris,Division bugs,,,杨玉婷
+,,osiris,Modulo bugs,,,杨玉婷
+SWC-101,Integer Overflow and Underflow,osiris,Overflow bugs,,,杨玉婷
+SWC-107,Reentrancy,osiris,Reentrancy bug,,,杨玉婷
+,,osiris,Signedness bugs,,,杨玉婷
+SWC-116,Block values as a proxy for time,osiris,Time dependency bug,,,杨玉婷
+,,osiris,Truncation bugs,,,杨玉婷
+SWC-101,Integer Overflow and Underflow,osiris,Underflow bugs,,,杨玉婷
+,,,,,,
+,,semgrep,use-abi-encodecall-instead-of-encodewithselector,,To guarantee arguments type safety it is recommended to use `abi.encodeCall` instead of `abi.encodeWithSelector`.,冯昊博
+,,semgrep,use-ownable2step,,"By demanding that the receiver of the owner permissions actively accept via a contract call of its own, `Ownable2Step` and `Ownable2StepUpgradeable` prevent the contract ownership from accidentally being transferred to an address that cannot handle it.",冯昊博
+,,semgrep,array-length-outside-loop,,"Caching the array length outside a loop saves reading it on each iteration, as long as the array's length is not changed during the loop.",冯昊博
+,,semgrep,inefficient-state-variable-increment,,<x> += <y> costs more gas than <x> = <x> + <y> for state variables.,冯昊博
+,,semgrep,init-variables-with-default-value,,Uninitialized variables are assigned with the types default value. Explicitly initializing a variable with its default value costs unnecessary gas.,冯昊博
+,,semgrep,non-optimal-variables-swap,,"Consider swapping variables using `($VAR1, $VAR2) = ($VAR2, $VAR1)` to save gas",冯昊博
+,,semgrep,non-payable-constructor,,Consider making costructor payable to save gas.,冯昊博
+,,semgrep,state-variable-read-in-a-loop,,Replace state variable reads and writes within loops with local variable reads and writes.,冯昊博
+SWC124,,semgrep,unnecessary-checked-arithmetic-in-loop,,A lot of times there is no risk that the loop counter can overflow. Using Solidity's unchecked block saves the overflow checks.,冯昊博
+,,semgrep,use-custom-error-not-require,,Consider using custom errors as they are more gas efficient while allowing developers to describe the error in detail using NatSpec.,冯昊博
+,,semgrep,use-multiple-require,,"Using multiple require statements is cheaper than using && multiple check combinations. There are more advantages, such as easier to read code and better coverage reports.",冯昊博
+,,semgrep,use-nested-if,,"Using nested is cheaper than using && multiple check combinations. There are more advantages, such as easier to read code and better coverage reports.",冯昊博
+,,semgrep,use-prefix-decrement-not-postfix,,Consider using the prefix decrement expression whenever the return value is not needed. The prefix decrement expression is cheaper in terms of gas.,冯昊博
+,,semgrep,use-prefix-increment-not-postfix,,Consider using the prefix increment expression whenever the return value is not needed. The prefix increment expression is cheaper in terms of gas.,冯昊博
+SWC101,,semgrep,basic-oracle-manipulation,,Price oracle can be manipulated via flashloan,冯昊博
+SWC101,,semgrep,basic-arithmetic-underflow,,Possible arithmetic underflow,冯昊博
+,,semgrep,use-short-revert-string,,Shortening revert strings to fit in 32 bytes will decrease gas costs for deployment and gas costs when the revert condition has been met.,冯昊博
+SWC107,,semgrep,compound-borrowfresh-reentrancy,,Function borrowFresh() in Compound performs state update after doTransferOut(),冯昊博
+,,semgrep,arbitrary-send-erc20,,"msg.sender is not being used when calling erc20.transferFrom. Example - Alice approves this contract to spend her ERC20 tokens. Bob can call function 'a' and specify Alice's address as the from parameter in transferFrom, allowing him to transfer Alice's tokens to himself.",冯昊博
+SWC105,,semgrep,compound-sweeptoken-not-restricted,,Function sweepToken is allowed to be called by anyone,冯昊博
+,,semgrep,erc20-public-transfer,,Custom ERC20 implementation exposes _transfer() as public,冯昊博
+SWC107,,semgrep,erc677-reentrancy,,ERC677 callAfterTransfer() reentrancy,冯昊博
+,,semgrep,erc721-arbitrary-transferfrom,,Custom ERC721 implementation lacks access control checks in _transfer(),冯昊博
+SWC107,,semgrep,erc721-reentrancy,,ERC721 onERC721Received() reentrancy,冯昊博
+SWC107,,semgrep,erc777-reentrancy,,ERC777 tokensReceived() reentrancy,冯昊博
+,,semgrep,gearbox-tokens-path-confusion,,UniswapV3 adapter implemented incorrect extraction of path parameters,冯昊博
+SWC101,,semgrep,keeper-network-oracle-manipulation,,"Keep3rV2.current() call has high data freshness, but it has low security, an exploiter simply needs to",冯昊博
+SWC130,,semgrep,no-bidi-characters,,The code must not contain any of Unicode Direction Control Characters,冯昊博
+SWC117,,semgrep,openzeppelin-ecdsa-recover-malleable,,Potential signature malleability in $F,冯昊博
+,,semgrep,proxy-storage-collision,,Proxy declares a state var that may override a storage slot of the implementation,冯昊博
+,,semgrep,uniswap-callback-not-protected,,Uniswap callback is not protected,冯昊博
+SWC106,,semgrep,accessible-selfdestruct,,Contract can be destructed by anyone in $FUNC,冯昊博
+SWC112,,semgrep,arbitrary-low-level-call,,An attacker may perform call() to an arbitrary address with controlled calldata,冯昊博
+SWC107,,semgrep,balancer-readonly-reentrancy-getpooltokens,,$VAULT.getPoolTokens() call on a Balancer pool is not protected from the read-only reentrancy.,冯昊博
+SWC107,,semgrep,balancer-readonly-reentrancy-getrate,,$VAR.getRate() call on a Balancer pool is not protected from the read-only reentrancy.,冯昊博
+SWC107,,semgrep,curve-readonly-reentrancy,,$POOL.get_virtual_price() call on a Curve pool is not protected from the read-only reentrancy.,冯昊博
+SWC112,,semgrep,delegatecall-to-arbitrary-address,,An attacker may perform delegatecall() to an arbitrary address.,冯昊博
+SWC133,,semgrep,encode-packed-collision,,abi.encodePacked hash collision with variable length arguments in $F(),冯昊博
+,,semgrep,erc20-public-burn,,Anyone can burn tokens of other accounts,冯昊博
+,,semgrep,incorrect-use-of-blockhash,,blockhash(block.number) and blockhash(block.number + N) always returns 0.,冯昊博
+,,semgrep,msg-value-multicall,,$F with constant msg.value can be called multiple times,冯昊博
+,,semgrep,no-slippage-check,,No slippage check in a Uniswap v2/v3 trade,冯昊博
+,,semgrep,oracle-price-update-not-restricted,,Oracle price data can be submitted by anyone,冯昊博
+,,semgrep,redacted-cartel-custom-approval-bug,,transferFrom() can steal allowance of other accounts,冯昊博
+,,semgrep,rigoblock-missing-access-control,,setMultipleAllowances() is missing onlyOwner modifier,冯昊博
+,,semgrep,sense-missing-oracle-access-control,,Oracle update is not restricted in $F(),冯昊博
+,,semgrep,superfluid-ctx-injection,,A specially crafted calldata may be used to impersonate other accounts,冯昊博
+,,semgrep,tecra-coin-burnfrom-bug,,"Parameter ""from"" is checked at incorrect position in ""_allowances"" mapping",冯昊博
+,,semgrep,unrestricted-transferownership,,Unrestricted transferOwnership,冯昊博
+,,solhint,code-complexity,,"Function has cyclomatic complexity ""current"" but allowed no more than maxcompl.",冯昊博
+,,solhint,explicit-types,,Forbid or enforce explicit types (like uint256) that have an alias (like uint).,冯昊博
+,,solhint,function-max-lines,,"Function body contains ""count"" lines but allowed no more than maxlines.",冯昊博
+,,solhint,max-line-length,,Line length must be no more than maxlen.,冯昊博
+,,solhint,max-states-count,,"Contract has ""some count"" states declarations but allowed no more than maxstates.",冯昊博
+,,solhint,no-console,,No console.log/logInt/logBytesX/logString/etc & No hardhat and forge-std console.sol import statements.,冯昊博
+,,solhint,no-empty-blocks,,Code block has zero statements inside. Exceptions apply.,冯昊博
+,,solhint,no-global-import,,Import statement includes an entire file instead of selected symbols.,冯昊博
+,,solhint,no-unused-import,,Imported object name is not being used by the contract.,冯昊博
+,,solhint,no-unused-vars,,"Variable ""name"" is unused.",冯昊博
+,,solhint,one-contract-per-file,,,冯昊博
+,,solhint,payable-fallback,,When fallback is not payable and there is no receive function you will not be able to receive currency.,冯昊博
+,,solhint,reason-string,,Require or revert statement must have a reason string and check that each reason string is at most N characters long.,冯昊博
+,,solhint,constructor-syntax,,Constructors should use the new constructor keyword.,冯昊博
+,,solhint,interface-starts-with-i,,Solidity Interfaces names should start with an I,冯昊博
+,,solhint,const-name-snakecase,,"Constant name must be in capitalized SNAKE_CASE. (Does not check IMMUTABLES, use immutable-vars-naming)",冯昊博
+,,solhint,contract-name-camelcase,,"Contract, Structs and Enums should be in CamelCase.",冯昊博
+,,solhint,event-name-camelcase,,Event name must be in CamelCase.,冯昊博
+,,solhint,foundry-test-functions,,Enforce naming convention on functions for Foundry test cases,冯昊博
+,,solhint,func-name-mixedcase,,Function name must be in mixedCase.,冯昊博
+,,solhint,func-named-parameters,,Enforce named parameters for function calls with 4 or more arguments. This rule may have some false positives,冯昊博
+,,solhint,func-param-name-mixedcase,,Function param name must be in mixedCase.,冯昊博
+,,solhint,immutable-vars-naming,,Check Immutable variables. Capitalized SNAKE_CASE or mixedCase depending on configuration.,冯昊博
+,,solhint,modifier-name-mixedcase,,Modifier name must be in mixedCase.,冯昊博
+,,solhint,named-parameters-mapping,,Solidity v0.8.18 introduced named parameters on the mappings definition.,冯昊博
+,,solhint,private-vars-leading-underscore,,"Non-external functions and state variables should start with a single underscore. Others, shouldn't",冯昊博
+,,solhint,use-forbidden-name,,"Avoid to use letters 'I', 'l', 'O' as identifiers.",冯昊博
+,,solhint,var-name-mixedcase,,"Variable name must be in mixedCase. (Does not check IMMUTABLES, use immutable-vars-naming)",冯昊博
+,,solhint,imports-on-top,,Import statements must be on top.,冯昊博
+,,solhint,ordering,,"Check order of elements in file and inside each contract, according to the style guide.",冯昊博
+,,solhint,visibility-modifier-order,,Visibility modifier must be first in list of modifiers.,冯昊博
+,,solhint,gas-calldata-parameters,,Suggest calldata keyword on function arguments when read only,冯昊博
+,,solhint,gas-custom-errors,,Enforces the use of Custom Errors over Require and Revert statements,冯昊博
+,,solhint,gas-increment-by-one,,Suggest incrementation by one like this ++i instead of other type,冯昊博
+,,solhint,gas-indexed-events,,"Suggest indexed arguments on events for uint, bool and address",冯昊博
+,,solhint,gas-length-in-loops,,Suggest replacing object.length in a loop condition to avoid calculation on each lap,冯昊博
+,,solhint,gas-multitoken1155,,ERC1155 is a cheaper non-fungible token than ERC721,冯昊博
+,,solhint,gas-named-return-values,,Enforce the return values of a function to be named,冯昊博
+,,solhint,gas-small-strings,,Keep strings smaller than 32 bytes,冯昊博
+,,solhint,gas-strict-inequalities,,Suggest Strict Inequalities over non Strict ones,冯昊博
+,,solhint,gas-struct-packing,,Suggest to re-arrange struct packing order when it is inefficient,冯昊博
+,,solhint,comprehensive-interface,,Check that all public or external functions are override. This is iseful to make sure that the whole API is extracted in an interface.,冯昊博
+,,solhint,quotes,,Enforces the use of double or simple quotes as configured for string literals. Values must be 'single' or 'double'.,冯昊博
+,,solhint,avoid-call-value,,"Avoid to use "".call.value()()"".",冯昊博
+,,solhint,avoid-low-level-calls,,Avoid to use low level calls.,冯昊博
+SWC111,,solhint,avoid-sha3,,"Use ""keccak256"" instead of deprecated ""sha3"".",冯昊博
+SWC111,,solhint,avoid-suicide,,"Use ""selfdestruct"" instead of deprecated ""suicide"".",冯昊博
+SWC111,,solhint,avoid-throw,,"""throw"" is deprecated, avoid to use it.",冯昊博
+SWC115,,solhint,avoid-tx-origin,,Avoid to use tx.origin.,冯昊博
+,,solhint,check-send-result,,"Check result of ""send"" call.",冯昊博
+SWC102,,solhint,compiler-version,,Compiler version must satisfy a semver requirement.,冯昊博
+SWC108,,solhint,func-visibility,,Explicitly mark visibility in function.,冯昊博
+,,solhint,multiple-sends,,"Avoid multiple calls of ""send"" method in single transaction.",冯昊博
+,,solhint,no-complex-fallback,,Fallback function must be simple.,冯昊博
+,,solhint,no-inline-assembly,,Avoid to use inline assembly. It is acceptable only in rare cases.,冯昊博
+,,solhint,not-rely-on-block-hash,,"Do not rely on ""block.blockhash"". Miners can influence its value.",冯昊博
+,,solhint,not-rely-on-time,,Avoid making time-based decisions in your business logic.,冯昊博
+SWC107,,solhint,reentrancy,,Possible reentrancy vulnerabilities. Avoid state changes after transfer.,冯昊博
+SWC108,,solhint,state-visibility,,Explicitly mark visibility of state.,冯昊博
+,,,,,,
+"SWC-107, DASP-1",Reentrancy,Securify,DAOConstantGas,,"固定的gas费用：大致是无论什么操作都会消耗固定的gas，有可能导致过高和过低的gas消耗。合约有gas泄漏的风险（即可能被攻击者递归调用一些不做限制的函数，而耗尽合约的gas,造成财产损失）（来源网络）",钟宏展
+DASP-3,"An overflow condition gives incorrect results and, particularly if the possibility has not been anticipated, can compromise a program’s reliability and security.",Securify,MissingInputValidation,,输入校验缺失：是指合约没有对用户输入的内容进行检查或限制，以确信它是合法和安全的。这可能导致各种各样的漏洞，常见的是溢出漏洞。（来源网络）,钟宏展
+"SWC-114, DASP-7",Transaction Order Dependence,Securify,TODAmount,三者都表示TOD（顺序依赖型交易漏洞）(来源论文),以太币转让的数量取决于交易顺序,钟宏展
+"SWC-114, DASP-7",Transaction Order Dependence,Securify,TODReceiver,,接收以太币转账的人可能会因交易顺序而改变,钟宏展
+"SWC-114, DASP-7",Transaction Order Dependence,Securify,TODTransfer,,以太币转账的执行依赖于交易顺序,钟宏展
+"SWC-104, DASP-4",Unchecked Call Return Value,Securify,UnhandledException,,未处理异常：默认的异常处理，或者专门引入以避免处理异常，即对异常的不作为。论文作者认为用户经常故意上传易受攻击的合约来测试和评估 SECURIFY（来源论文）,钟宏展
+"SWC-105, DASP-2",Unprotected Ether Withdrawal,Securify,UnrestrictedEtherFlow,,不受限制的以太币流动：庞氏骗局，对用户而言该指令不转移以太币，但实际上发生了以太币转移（论文特指，通过调用对内存不受限制写入的库函数来修改以太币）(来源论文),钟宏展
+"SWC-120, DASP-6",,sFuzz,Block_Number_Dependency,,,钟宏展
+"SWC-106, DASP-2",,sFuzz,Dangerous_Delegate_Call,,,钟宏展
+"SWC-104, DASP-4",,sFuzz,Exception_Disorder,,,钟宏展
+DASP-5,,sFuzz,Freezing_Ether,,,钟宏展
+SWC-134,,sFuzz,Gasless_Send,,,钟宏展
+"SWC-101, DASP-3",,sFuzz,Integer_Overflow,,,钟宏展
+"SWC-101, DASP-3",,sFuzz,Integer_Underflow,,,钟宏展
+"SWC-107, DASP-1",,sFuzz,Reentrancy,,,钟宏展
+"SWC-116, DASP-8",,sFuzz,Timestamp_Dependency,,,钟宏展
